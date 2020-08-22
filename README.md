@@ -11,11 +11,11 @@ The player isn't physically complex, it is basically a one track record player t
 This project was entered in the "Change the Planet with PSoC® IoT Design Contest". Check out the project here: https://hackaday.io/project/171713-singing-bowl-player
 
 
-##Arduio Setup
+## Arduio Setup
 The Arduio code is developed for the Wemos D1 Lite. This AWS IOT portion of this code originated from these instructions:
 https://electronicsinnovation.com/how-to-connect-nodemcu-esp8266-with-aws-iot-core-using-arduino-ide-mqtt/
 
-##PSoC Setup
+## PSoC Setup
 The PSoC code was developed for the CY8CKIT-062-WiFi-BT. The PSoC setup instruction for the AWS IOT portion of the code originates from these instructions:
 https://github.com/cypresssemiconductorco/afr-example-capsense
 
