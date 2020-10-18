@@ -18,9 +18,10 @@
 #define SERVO_STEP 1        //Change servo degrees per step
 
 //Default values
-#define MAX_DELAY 20000     //Max time delay for stepper motor
-#define RAMP_RATE 50        //time for each step in milliseconds
-#define SERVO_PARK 70       //default position for servo
+#define MAX_DELAY 5000     //Max time delay for stepper motor
+#define RAMP_RATE 50       //time for each step in milliseconds
+#define SERVO_PARK 70      //default position for servo
+#define DEBOUNCE 100       //count value to turn on\off player 
 
 //The playset is a set of instructions on how to play the bowl
 typedef struct 
@@ -42,10 +43,10 @@ bool playing = false;           //flag to indicate if the playset is playing
 
                        // fast  pos           delay         msec    
 playset thePlayset[] = {  {0,   SERVO_PARK,   MAX_DELAY,    5000  },  //Start at a stopped position
-                          {1,   50,           MAX_DELAY,    500   },  //quickly move to strike the bowl
-                          {1,   SERVO_PARK,   2500,         5000  },  //quickly move to resting position and start to rotate bowl
+                          {1,   40,           2500,         100   },  //quickly move to strike the bowl
+                          {1,   SERVO_PARK,   2500,         1000  },  //quickly move to resting position and start to rotate bowl
                           {0,   30,           2500,         60000 },  //slowly move stiker in place
-                          {0,   40,           5000,         10000 },  //start to slow down
+                          {0,   40,           3000,         10000 },  //start to slow down
                           {0,   SERVO_PARK,   MAX_DELAY,    5000  }}; //move to stop and repeat
 
 
@@ -180,6 +181,7 @@ void setup()
   pinMode(D2, OUTPUT);
   pinMode(D3, OUTPUT);
   pinMode(D4, OUTPUT);
+  pinMode(D7, INPUT);
   digitalWrite(D1, LOW);
   digitalWrite(D2, LOW);
   digitalWrite(D3, LOW);
@@ -197,7 +199,23 @@ void setup()
 void loop() 
 {
   static long current_msec = millis();
+  static int count = 0;
 
+  if(digitalRead(D7) == HIGH)
+  {
+    count++;
+    if(count > DEBOUNCE && (count < (DEBOUNCE << 1)) )
+    {
+      playing = !playing;
+      count = (DEBOUNCE << 1);
+    }
+  }
+  else
+  {
+    count = 0;
+  }
+
+   
   if(playing)
   {
     stepperOutput(thePlayset[playset_index].motor_delay);
